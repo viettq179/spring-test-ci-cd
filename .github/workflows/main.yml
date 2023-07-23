@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          token: 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 # Use the Personal Access Token as the authentication token
+          token: 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 # Use the Personal Access Token as the authentication token
 
       - name: Set up Java
         uses: actions/setup-java@v2
