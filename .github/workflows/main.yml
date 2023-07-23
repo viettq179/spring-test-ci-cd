@@ -35,7 +35,7 @@ jobs:
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.5.0
         with:
-          ssh-private-key: ${{ secrets.SSH_TAGA_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.TAGA_SSH_KEY_NO_PASS }}
 
       - name: Copy jar file to Ubuntu host
         run: scp build/libs/*.jar ec2-user@13.215.213.170:~/ci-cd
@@ -44,7 +44,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ec2-user@13.215.213.170
-          key: ${{ secrets.SSH_TAGA_PRIVATE_KEY }}
+          key: ${{ secrets.TAGA_SSH_KEY_NO_PASS }}
           script: java -jar ~/ci-cd/spring-test-ci-cd-1.0-SNAPSHOT-plain.jar
             # Replace with your deployment script
             # e.g., stopping existing application, moving the new jar, starting the application, etc.
