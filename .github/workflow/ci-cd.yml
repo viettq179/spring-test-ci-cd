@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # or the branch you want to trigger the workflow on
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          token: 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 # Use the Personal Access Token as the authentication token
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11' # Replace with your desired Java version
+
+      - name: Build application
+        run: ./gradlew build
+
+      - name: Run tests
+        run: ./gradlew test
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: build # Wait for the 'build' job to complete
+
+    steps:
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_TAGA_PRIVATE_KEY }}
+
+      - name: Copy jar file to Ubuntu host
+        run: scp build/libs/*.jar ec2-user@13.215.213.170:~/ci-cd
+
+      - name: SSH into the Ubuntu host
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-user@13.215.213.170
+          key: ${{ secrets.SSH_TAGA_PRIVATE_KEY }}
+          script: java -jar ~/ci-cd/spring-test-ci-cd-1.0-SNAPSHOT-plain.jar
+            # Replace with your deployment script
+            # e.g., stopping existing application, moving the new jar, starting the application, etc.
