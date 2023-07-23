@@ -11,9 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          token: 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 # Use the Personal Access Token as the authentication token
+        uses: actions/checkout@v3
 
       - name: Set up Java
         uses: actions/setup-java@v2
