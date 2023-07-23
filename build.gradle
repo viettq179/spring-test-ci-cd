@@ -1,0 +1,45 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'com.example.demo'  // Replace with your desired package name
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = '11' // Replace with your desired Java version
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Add other dependencies as needed
+//    implementation group: 'org.springframework.data', name: 'spring-data-jpa'
+    implementation 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compileOnly 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.projectreactor:reactor-core:3.5.7'
+    testImplementation "junit:junit:4.12"
+}
+test {
+    useJUnitPlatform()
+}
+// Task to create an executable JAR file
+task createJar(type: Jar) {
+    archiveFileName = "${project.name}-${version}.jar"
+    from sourceSets.main.output
+}
+
+bootJar {
+    enabled = false // Disable the default Spring Boot JAR creation
+}
+
+// Task to run the Spring Boot application
+task runBoot(type: Exec, dependsOn: 'createJar') {
+    group = 'application'
+    description = 'Run the Spring Boot application'
+    commandLine 'java', '-jar', "${project.name}-${version}.jar"
+}
