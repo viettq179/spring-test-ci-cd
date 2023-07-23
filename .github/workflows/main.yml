@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11' # Replace with your desired Java version
+          distribution: 'adopt'
 
       - name: Build application
         run: ./gradlew build
